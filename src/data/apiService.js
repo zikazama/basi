@@ -5,42 +5,34 @@ const apiEndPoint = config().apiEndPoint();
 const apiKey = config().apiKey();
 
 function apiService() {
-  const headline = function () {
-    return axios
-      .get(`${apiEndPoint}top-headlines?country=id&apiKey=${apiKey}`)
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+  const headline = async () => {
+    return await axios
+      .get(`${apiEndPoint}top-headlines?country=id&apiKey=${apiKey}`);
   };
-  const search = function (query) {
+  const endpointHeadline = function () {
+    return `${apiEndPoint}top-headlines?country=id&apiKey=${apiKey}`;
+  }
+  const search = async (query) => {
     axios
-      .get(`${apiEndPoint}everything?q=${query}&apiKey=${apiKey}`)
-      .then(function (response) {
-        console.log(response);
-        return response;
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      .get(`${apiEndPoint}everything?q=${query}&apiKey=${apiKey}`);
   };
-  const category = function (category) {
+  const endpointSearch = function (query) {
+    return `${apiEndPoint}everything?q=${query}&apiKey=${apiKey}`;
+  }
+  const category = async (category) => {
     axios
-      .get(`${apiEndPoint}sources?category=${category}&apiKey=${apiKey}`)
-      .then(function (response) {
-        console.log(response);
-        return response;
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      .get(`${apiEndPoint}sources?category=${category}&apiKey=${apiKey}`);
   };
+  const endpointCategory = function (category) {
+    return `${apiEndPoint}sources?category=${category}&apiKey=${apiKey}`;
+  }
   return {
     headline: headline,
     search: search,
     category: category,
+    endpointHeadline: endpointHeadline,
+    endpointSearch: endpointSearch,
+    endpointCategory: endpointCategory
   };
 }
 
