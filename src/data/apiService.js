@@ -7,7 +7,7 @@ const apiKey = config().apiKey();
 function apiService() {
   const headline = async () => {
     return await axios
-      .get(`${apiEndPoint}top-headlines?country=id&apiKey=${apiKey}`);
+      .get(`${apiEndPoint}top-headlines?category=technology&country=id&apiKey=${apiKey}`);
   };
   const endpointHeadline = function () {
     return `${apiEndPoint}top-headlines?country=id&apiKey=${apiKey}`;

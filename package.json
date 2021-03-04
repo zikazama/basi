@@ -10,6 +10,7 @@
     "eslint-plugin-react-hooks": "0.0.0-ee4326357",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-material-ui-carousel": "^2.2.1",
     "react-native-axios": "^0.17.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",

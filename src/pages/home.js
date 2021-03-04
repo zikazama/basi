@@ -7,7 +7,6 @@ function Home() {
   return (
     <div>
       <Header />
-
       <Container>
         <div style={{ marginBottom: "80px" }}></div>
         <h1>Home</h1>
