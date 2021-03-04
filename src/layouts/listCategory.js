@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import NewsCard from "../components/cardNews";
 import apiService from "./../data/apiService";
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,16 +16,17 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
 }));
-function ListNews() {
+function ListCategory({ category }) {
   const classes = useStyles();
   const [newsData, setNewsData] = useState({ articles: [] });
   const [isLoading, setIsLoading] = useState(true);
   useEffect(async () => {
-    const result = await apiService().headline();
-    setNewsData(result.data.articles);
+    setIsLoading(true);
+    const result = await apiService().category(category);
+    setNewsData(result.data.sources);
     setIsLoading(false);
-    console.log(result.data.articles);
-  }, []);
+    console.log(result.data.sources);
+  }, [category]);
   return (
     <div className={classes.root}>
       {isLoading ? (
@@ -35,17 +36,23 @@ function ListNews() {
         </center>
       ) : (
         <Grid container spacing={3}>
-          {newsData.map((news, index) => {
-            return (
-              <Grid key={index} item xs={12} md={3}>
+          {newsData.length > 0 ? (
+            newsData.map((news, index) => {
+              return (
+                <Grid key={index} item xs={12} md={3}>
                   <NewsCard news={news}></NewsCard>
-              </Grid>
-            );
-          })}
+                </Grid>
+              );
+            })
+          ) : (
+            <center>
+              <div>Tidak Ada Berita yang cocok</div>
+            </center>
+          )}
         </Grid>
       )}
     </div>
   );
 }
 
-export default ListNews;
+export default ListCategory;

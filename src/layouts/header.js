@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -22,7 +22,6 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import ClassIcon from "@material-ui/icons/Class";
-import MailIcon from "@material-ui/icons/Mail";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -124,7 +123,7 @@ export default function PrimarySearchAppBar() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const query = React.useRef(null);
   const history = useHistory();
-  let [keyword, setKeyword] = useState(null);
+  let [, setKeyword] = useState(null);
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -194,6 +193,12 @@ export default function PrimarySearchAppBar() {
     setState({ ...state, [anchor]: open });
   };
 
+  const _handleCategory = (text) => {
+    let cat = "/category/" + text;
+    //console.log(cat);
+    history.push(cat);
+  };
+
   const list = (anchor) => (
     <div
       className={clsx(classesDrawer.list, {
@@ -203,11 +208,21 @@ export default function PrimarySearchAppBar() {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      <center><div variant="body2">Kategori</div></center>
+      <center>
+        <div variant="body2">Category</div>
+      </center>
       <Divider></Divider>
       <List>
-        {["Bisnis", "Entertaiment", "Umum", "Kesehatan", "Sains", "Olahraga","Teknologi"].map((text, index) => (
-          <ListItem button key={text}>
+        {[
+          "Business",
+          "Entertainment",
+          "General",
+          "Health",
+          "Science",
+          "Sports",
+          "Technology",
+        ].map((text, index) => (
+          <ListItem button key={text} onClick={(e) => _handleCategory(text)}>
             <ListItemIcon>
               <ClassIcon></ClassIcon>
             </ListItemIcon>
@@ -218,84 +233,84 @@ export default function PrimarySearchAppBar() {
       <Divider />
     </div>
   );
-  
+
   const _handleSearch = (e) => {
-    if(e.key === 'Enter'){
-      let q = '/search/'+query.current.value;
+    if (e.key === "Enter") {
+      let q = "/search/" + query.current.value;
       //console.log(q);
       history.push(q);
       setKeyword(query.current.value);
     }
-  }
+  };
 
   return (
-      <div className={classes.grow}>
-        <AppBar position="fixed" className={classes.appBar}>
-          <Toolbar>
+    <div className={classes.grow}>
+      <AppBar position="fixed" className={classes.appBar}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="open drawer"
+            onClick={toggleDrawer("left", true)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography className={classes.title} variant="h6" noWrap>
+            BASI
+          </Typography>
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
+            </div>
+            <InputBase
+              placeholder="Search…"
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              inputProps={{ "aria-label": "search" }}
+              onKeyDown={_handleSearch}
+              inputRef={query}
+            />
+          </div>
+          <div className={classes.grow} />
+          <div className={classes.sectionDesktop}>
+            <Link className={classes.link} to="/">
+              <Button color="inherit">Home</Button>
+            </Link>
+
+            <Link className={classes.link} to="/about">
+              <Button color="inherit">About</Button>
+            </Link>
+
+            <Link className={classes.link} to="/contact">
+              <Button color="inherit">Contact</Button>
+            </Link>
+          </div>
+          <div className={classes.sectionMobile}>
             <IconButton
-              edge="start"
-              className={classes.menuButton}
+              aria-label="show more"
+              aria-controls={mobileMenuId}
+              aria-haspopup="true"
+              onClick={handleMobileMenuOpen}
               color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer("left", true)}
             >
-              <MenuIcon />
+              <MoreIcon />
             </IconButton>
-            <Typography className={classes.title} variant="h6" noWrap>
-              BASI
-            </Typography>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                inputProps={{ "aria-label": "search" }}
-                onKeyDown={_handleSearch}
-                inputRef={query}
-              />
-            </div>
-            <div className={classes.grow} />
-            <div className={classes.sectionDesktop}>
-              <Link className={classes.link} to="/">
-                <Button color="inherit">Home</Button>
-              </Link>
-
-              <Link className={classes.link} to="/about">
-                <Button color="inherit">About</Button>
-              </Link>
-
-              <Link className={classes.link} to="/contact">
-                <Button color="inherit">Contact</Button>
-              </Link>
-            </div>
-            <div className={classes.sectionMobile}>
-              <IconButton
-                aria-label="show more"
-                aria-controls={mobileMenuId}
-                aria-haspopup="true"
-                onClick={handleMobileMenuOpen}
-                color="inherit"
-              >
-                <MoreIcon />
-              </IconButton>
-            </div>
-          </Toolbar>
-        </AppBar>
-        <SwipeableDrawer
-          anchor={"left"}
-          open={state["left"]}
-          onClose={toggleDrawer("left", false)}
-          onOpen={toggleDrawer("left", true)}
-        >
-          {list("left")}
-        </SwipeableDrawer>
-        {renderMobileMenu}
-        {renderMenu}
-      </div>
+          </div>
+        </Toolbar>
+      </AppBar>
+      <SwipeableDrawer
+        anchor={"left"}
+        open={state["left"]}
+        onClose={toggleDrawer("left", false)}
+        onOpen={toggleDrawer("left", true)}
+      >
+        {list("left")}
+      </SwipeableDrawer>
+      {renderMobileMenu}
+      {renderMenu}
+    </div>
   );
 }

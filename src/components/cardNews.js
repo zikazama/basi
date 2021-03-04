@@ -8,7 +8,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-import Link from '@material-ui/core/Link';
+import Link from "@material-ui/core/Link";
 
 const useStyles = makeStyles({
   root: {
@@ -23,21 +23,26 @@ export default function NewsCard({ news }) {
     <Card className={classes.root}>
       <CardActionArea>
         <Link href={news.url} rel="noopener noreferrer" target="_blank">
-        <CardMedia
-          component="img"
-          alt={news.title}
-          height="250"
-          image={news.urlToImage}
-          title={news.title}
-        />
-        <CardContent>
-          <Typography gutterBottom variant="body1" component="h4">
-            {news.title}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {news.description}
-          </Typography>
-        </CardContent>
+          {news.urlToImage ? (
+            <CardMedia
+              component="img"
+              alt={news.title}
+              height="250"
+              image={news.urlToImage}
+              title={news.title}
+            />
+          ) : (
+            ""
+          )}
+
+          <CardContent>
+            <Typography gutterBottom variant="body1" component="h4">
+              {news.title}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              {news.description}
+            </Typography>
+          </CardContent>
         </Link>
       </CardActionArea>
       <CardActions>

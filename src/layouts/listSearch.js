@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import NewsCard from "../components/cardNews";
 import apiService from "./../data/apiService";
@@ -41,9 +40,7 @@ function ListSearch({ query }) {
             newsData.map((news, index) => {
               return (
                 <Grid key={index} item xs={12} md={3}>
-                  {/* <Paper className={classes.paper}> */}
                   <NewsCard news={news}></NewsCard>
-                  {/* </Paper> */}
                 </Grid>
               );
             })
