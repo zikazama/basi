@@ -13,14 +13,14 @@ function apiService() {
     return `${apiEndPoint}top-headlines?country=id&apiKey=${apiKey}`;
   }
   const search = async (query) => {
-    axios
+    return await axios
       .get(`${apiEndPoint}everything?q=${query}&apiKey=${apiKey}`);
   };
   const endpointSearch = function (query) {
     return `${apiEndPoint}everything?q=${query}&apiKey=${apiKey}`;
   }
   const category = async (category) => {
-    axios
+    return await axios
       .get(`${apiEndPoint}sources?category=${category}&apiKey=${apiKey}`);
   };
   const endpointCategory = function (category) {

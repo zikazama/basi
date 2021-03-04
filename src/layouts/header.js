@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, {useState} from "react";
+import { Link, useHistory } from "react-router-dom";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -21,7 +21,7 @@ import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
+import ClassIcon from "@material-ui/icons/Class";
 import MailIcon from "@material-ui/icons/Mail";
 
 const useStyles = makeStyles((theme) => ({
@@ -122,6 +122,9 @@ export default function PrimarySearchAppBar() {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const query = React.useRef(null);
+  const history = useHistory();
+  let [keyword, setKeyword] = useState(null);
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -154,27 +157,29 @@ export default function PrimarySearchAppBar() {
 
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <Link className={classes.linkDark} to="/">
-        <MenuItem>Home</MenuItem>
-      </Link>
+    <React.Fragment>
+      <Menu
+        anchorEl={mobileMoreAnchorEl}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        id={mobileMenuId}
+        keepMounted
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
+        open={isMobileMenuOpen}
+        onClose={handleMobileMenuClose}
+      >
+        <Link className={classes.linkDark} to="/">
+          <MenuItem>Home</MenuItem>
+        </Link>
 
-      <Link className={classes.linkDark} to="/about">
-        <MenuItem>About</MenuItem>
-      </Link>
+        <Link className={classes.linkDark} to="/about">
+          <MenuItem>About</MenuItem>
+        </Link>
 
-      <Link className={classes.linkDark} to="/contact">
-        <MenuItem>Contact</MenuItem>
-      </Link>
-    </Menu>
+        <Link className={classes.linkDark} to="/contact">
+          <MenuItem>Contact</MenuItem>
+        </Link>
+      </Menu>
+    </React.Fragment>
   );
 
   const toggleDrawer = (anchor, open) => (event) => {
@@ -198,96 +203,99 @@ export default function PrimarySearchAppBar() {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
+      <center><div variant="body2">Kategori</div></center>
+      <Divider></Divider>
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+        {["Bisnis", "Entertaiment", "Umum", "Kesehatan", "Sains", "Olahraga","Teknologi"].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              <ClassIcon></ClassIcon>
             </ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
         ))}
       </List>
       <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
     </div>
   );
+  
+  const _handleSearch = (e) => {
+    if(e.key === 'Enter'){
+      let q = '/search/'+query.current.value;
+      //console.log(q);
+      history.push(q);
+      setKeyword(query.current.value);
+    }
+  }
 
   return (
-    <div className={classes.grow}>
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-            onClick={toggleDrawer("left", true)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
-            BASI
-          </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </div>
-          <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>
-            <Link className={classes.link} to="/">
-              <Button color="inherit">Home</Button>
-            </Link>
-
-            <Link className={classes.link} to="/about">
-              <Button color="inherit">About</Button>
-            </Link>
-
-            <Link className={classes.link} to="/contact">
-              <Button color="inherit">Contact</Button>
-            </Link>
-          </div>
-          <div className={classes.sectionMobile}>
+      <div className={classes.grow}>
+        <AppBar position="fixed" className={classes.appBar}>
+          <Toolbar>
             <IconButton
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
+              edge="start"
+              className={classes.menuButton}
               color="inherit"
+              aria-label="open drawer"
+              onClick={toggleDrawer("left", true)}
             >
-              <MoreIcon />
+              <MenuIcon />
             </IconButton>
-          </div>
-        </Toolbar>
-      </AppBar>
-      <SwipeableDrawer
-        anchor={'left'}
-        open={state['left']}
-        onClose={toggleDrawer('left', false)}
-        onOpen={toggleDrawer('left', true)}
-      >
-        {list('left')}
-      </SwipeableDrawer>
-      {renderMobileMenu}
-      {renderMenu}
-    </div>
+            <Typography className={classes.title} variant="h6" noWrap>
+              BASI
+            </Typography>
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase
+                placeholder="Search…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ "aria-label": "search" }}
+                onKeyDown={_handleSearch}
+                inputRef={query}
+              />
+            </div>
+            <div className={classes.grow} />
+            <div className={classes.sectionDesktop}>
+              <Link className={classes.link} to="/">
+                <Button color="inherit">Home</Button>
+              </Link>
+
+              <Link className={classes.link} to="/about">
+                <Button color="inherit">About</Button>
+              </Link>
+
+              <Link className={classes.link} to="/contact">
+                <Button color="inherit">Contact</Button>
+              </Link>
+            </div>
+            <div className={classes.sectionMobile}>
+              <IconButton
+                aria-label="show more"
+                aria-controls={mobileMenuId}
+                aria-haspopup="true"
+                onClick={handleMobileMenuOpen}
+                color="inherit"
+              >
+                <MoreIcon />
+              </IconButton>
+            </div>
+          </Toolbar>
+        </AppBar>
+        <SwipeableDrawer
+          anchor={"left"}
+          open={state["left"]}
+          onClose={toggleDrawer("left", false)}
+          onOpen={toggleDrawer("left", true)}
+        >
+          {list("left")}
+        </SwipeableDrawer>
+        {renderMobileMenu}
+        {renderMenu}
+      </div>
   );
 }

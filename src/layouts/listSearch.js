@@ -5,7 +5,7 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import NewsCard from "../components/cardNews";
 import apiService from "./../data/apiService";
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,16 +17,17 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
 }));
-function ListNews() {
+function ListSearch({ query }) {
   const classes = useStyles();
   const [newsData, setNewsData] = useState({ articles: [] });
   const [isLoading, setIsLoading] = useState(true);
   useEffect(async () => {
-    const result = await apiService().headline();
+    setIsLoading(true);
+    const result = await apiService().search(query);
     setNewsData(result.data.articles);
     setIsLoading(false);
     console.log(result.data.articles);
-  }, []);
+  }, [query]);
   return (
     <div className={classes.root}>
       {isLoading ? (
@@ -36,19 +37,25 @@ function ListNews() {
         </center>
       ) : (
         <Grid container spacing={3}>
-          {newsData.map((news, index) => {
-            return (
-              <Grid key={index} item xs={12} md={3}>
-                {/* <Paper className={classes.paper}> */}
+          {newsData.length > 0 ? (
+            newsData.map((news, index) => {
+              return (
+                <Grid key={index} item xs={12} md={3}>
+                  {/* <Paper className={classes.paper}> */}
                   <NewsCard news={news}></NewsCard>
-                {/* </Paper> */}
-              </Grid>
-            );
-          })}
+                  {/* </Paper> */}
+                </Grid>
+              );
+            })
+          ) : (
+            <center>
+              <div>Tidak Ada Berita yang cocok</div>
+            </center>
+          )}
         </Grid>
       )}
     </div>
   );
 }
 
-export default ListNews;
+export default ListSearch;
