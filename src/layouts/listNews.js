@@ -1,12 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import NewsCard from "../components/cardNews";
 import apiService from "./../data/apiService";
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,15 +29,19 @@ function ListNews() {
   return (
     <div className={classes.root}>
       {isLoading ? (
-        <div>Loading</div>
+        <center>
+          <div>Loading</div>
+        </center>
       ) : (
         <Grid container spacing={3}>
           {newsData.map((news) => {
-            <Grid item xs={12} md={3}>
-              <Paper className={classes.paper}>
-                <NewsCard></NewsCard>
-              </Paper>
-            </Grid>;
+            return (
+              <Grid item xs={12} md={3}>
+                <Paper className={classes.paper}>
+                  <NewsCard news={news}></NewsCard>
+                </Paper>
+              </Grid>
+            );
           })}
         </Grid>
       )}
