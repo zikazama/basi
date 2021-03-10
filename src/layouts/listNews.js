@@ -20,14 +20,24 @@ function ListNews() {
   const classes = useStyles();
   const [newsData, setNewsData] = useState({ articles: [] });
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+  let errorMessage = '';
   useEffect(async () => {
-    const result = await apiService().headline();
-    setNewsData(result.data.articles);
-    setIsLoading(false);
-    console.log(result.data.articles);
+    try {
+      const result = await apiService().headline();
+      setNewsData(result.data.articles);
+      setIsLoading(false);
+      console.log(result.data.articles);
+    } catch (error) {
+      errorMessage = error;
+      console.log(error);
+      setIsLoading(false);
+      setIsError(true);
+    }
   }, []);
   return (
     <div className={classes.root}>
+      {isError ? errorMessage : ''}
       {isLoading ? (
         <center>
           <CircularProgress color="secondary" />
